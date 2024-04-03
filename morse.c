@@ -18,6 +18,7 @@ char *text_input();
 char decode_morse_token(const char *token);
 char *morse_to_text(const char *morse);
 char *text_to_morse(const char *text);
+int is_null_terminated(const char *str);
 
 // define a struct to hold character and morse code equivalent
 struct morse_entry
@@ -73,6 +74,14 @@ int main()
     char *text;
     // char *translation;
 
+    const char *str1 = "Hello";
+    printf("str1: %s\n", str1);
+    printf("str is null-term: %d\n", is_null_terminated(str1));
+
+    const char *str2 = "Hello\0";
+    printf("str2: %s\n", str2);
+    printf("str is null-term: %d\n", is_null_terminated(str2));
+
     printf("Enter 'M' to input Morse code, or 'T' to input text.\n");
     scanf("%c", &selection);
 
@@ -103,7 +112,7 @@ char *morse_input()
     // malloc return void pointer (void* ) which is then cast to char*
     char *input = malloc(100 * sizeof(char));
 
-    printf("Enter Morse code ('.' for dot, '-' for dash,\n using spaces between letters and '/' between words): ");
+    printf("Enter Morse code ('.' for dot, '-' for dash,\nusing spaces between letters and '/' between words): ");
 
     // Consume char in input buffer
     while (getchar() != '\n')
@@ -159,10 +168,16 @@ char decode_morse_token(const char *token)
 {
 
     int size = sizeof(morse_table) / sizeof(morse_table[0]);
-    printf("%d\n", size);
+    printf("Size of table / table[0]: %d\n", size);
+    if (token == NULL)
+    {
+        printf("tok is null\n");
+    }
 
+    printf("This works\n");
+    //   This line is causing segfault
     printf("Token to decode: %s\n", token);
-    printf("still working");
+    // printf("still working");
 
     for (int i = 0; i < sizeof(morse_table) / sizeof(morse_table[0]); i++)
     {
@@ -185,11 +200,24 @@ char decode_morse_token(const char *token)
 char *morse_to_text(const char *morse)
 {
     char decoded_message[100];
-
     char *token = strtok(morse, " ");
     while (token != NULL)
     {
         printf("From morse_to_text sending token: %s\n", token);
+
+        int is_null = is_null_terminated(token);
+        printf("Is null terminated before (1 for yes/0 for no): %d\n", is_null);
+        printf("Len of token before: %zu\n", strlen(token));
+        if (is_null == 0)
+        {
+            printf("adding null\n");
+            token[strlen(token)] = '\0';
+        }
+        printf("Len of token after: %zu\n", strlen(token));
+
+        is_null = is_null_terminated(token);
+        printf("Is null terminated after (1 for yes/0 for no): %d\n", is_null);
+
         // Decode Morse token and append to message string
         char decoded_token = decode_morse_token(token);
         printf("Decoded token: %s\n", decoded_token);
@@ -215,4 +243,22 @@ char *text_to_morse(const char *text)
 {
 
     return NULL;
+}
+
+int is_null_terminated(const char *str)
+{
+    printf("In null term\n");
+    // Iterate through chars
+    for (int i = 0; str[i] != '\0'; i++)
+    {
+        printf("str[i] = %c\n", str[i]);
+        // If null char found, return 1
+        if (str[i] == '\0')
+        {
+            return 1;
+        }
+    }
+
+    // If no null char found, return 0
+    return 0;
 }
