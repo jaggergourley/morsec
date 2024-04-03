@@ -49,11 +49,11 @@ int main() {
 
   if (selection == 'm' || selection == 'M') {
     morse = morse_input();
-    printf("From main: %s\n", morse);
+    printf("Morse input from main: %s\n", morse);
     morse_to_text(morse);
   } else if (selection == 't' || selection == 'T') {
     text = text_input();
-    printf("From main: %s\n", text);
+    printf("Text input from main: %s\n", text);
     text_to_morse(text);
   } else {
     printf("Invalid Choice!\n");
@@ -63,10 +63,11 @@ int main() {
 }
 
 char *morse_input() {
-  // allocates memory dynamically on the heap for an array
-  //  of chars with 100 elements
-  // malloc return void pointer (void* ) which is then cast to char*
   char *input = malloc(100 * sizeof(char));
+  if (input == NULL) {
+    fprintf(stderr, "Memory allocation failed\n");
+    exit(1);
+  }
 
   printf("Enter Morse code ('.' for dot, '-' for dash,\nusing spaces between "
          "letters and '/' between words): ");
@@ -75,7 +76,8 @@ char *morse_input() {
   while (getchar() != '\n')
     ;
 
-  fgets(input, sizeof(input), stdin);
+  fgets(input, 100, stdin);
+  printf("Morse input before newline remove: %s\n", input);
 
   // Remove newline character from input
   input[strcspn(input, "\n")] = '\0';
@@ -100,7 +102,7 @@ char *text_input() {
   // Consume char in input buffer
   while (getchar() != '\n')
     ;
-  fgets(input, sizeof(input), stdin);
+  fgets(input, 100, stdin);
 
   // Remove newline character from input
   input[strcspn(input, "\n")] = '\0';
@@ -167,4 +169,11 @@ char *morse_to_text(char *morse) {
   return decoded_message;
 }
 
-char *text_to_morse(char *text) { return NULL; }
+char *text_to_morse(char *text) {
+  char *decoded_message = malloc(100 * sizeof(char));
+
+  // will be reading input string one char at a time
+  // find equivalent morse code for char and append to decoded string
+
+  return decoded_message;
+}
