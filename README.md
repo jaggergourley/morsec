@@ -28,4 +28,5 @@ Enter Morse code ('.' for dot/dit, '-' for dash/dah, using spaces between
 letters and '/' between words, be sure to put spaces around '/' as well)
 Will return '#' for an invalid Morse code sequence:
 -- --- .-. ... . / -.-. --- -.. .
+Translation: MORSE CODE
 ```
