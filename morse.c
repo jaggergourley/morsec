@@ -101,7 +101,7 @@ char *morse_input() {
 char *text_input() {
   char *input = malloc(1024 * sizeof(char));
 
-  printf("Enter text, alphanumeric and .,?'!/()&:;=+-_$@\n");
+  printf("Enter text (alphanumeric and .,?'!/()&:;=+-_$@):\n");
 
   // Consume char in input buffer
   while (getchar() != '\n')
